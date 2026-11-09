@@ -1,4 +1,4 @@
-﻿using ContactBook.Entities;
+﻿using ContactBook.Models;
 namespace ContactBook.Interfaces
 {
     public interface INoteService

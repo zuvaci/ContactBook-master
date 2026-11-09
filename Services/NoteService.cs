@@ -1,28 +1,67 @@
 ﻿using ContactBook.Entities;
 using ContactBook.Interfaces;
+using ContactBook.Models;
 
 namespace ContactBook.Services
 {
     public class NoteService : INoteService
     {
-        public Note Create(Note note)
+        private readonly AppDbContext _context;
+        public NoteService(AppDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public Models.Note Create(Models.Note note)
+        {
+            var entity = new Entities.Note();
+            entity.Text = note.Text;
+            entity.ContactId = note.ContactId;
+
+            _context.Add(entity);
+            _context.SaveChanges();
+
+            return note;
         }
 
         public bool Delete(int contactId)
         {
-            throw new NotImplementedException();
+            var entity = _context.Notes.FirstOrDefault(x => x.Id == contactId);
+            if (entity != null)
+            {
+                _context.Notes.Remove(entity);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
-        public List<Note> GetAllByContactId(int contactId)
+        public List<Models.Note> GetAllByContactId(int contactId)
         {
-            throw new NotImplementedException();
+            var entityList = _context.Notes.Where(n => n.ContactId == contactId).ToList();
+            var modelList = new List<Models.Note>();
+
+            foreach (var entity in entityList)
+            {
+                var model = new Models.Note();
+                model.Id = entity.Id;
+                model.Text = entity.Text;
+                model.ContactId = contactId;
+                modelList.Add(model);
+            }
+            return modelList;
         }
 
-        public Note Update(Note note)
+        public Models.Note Update(Models.Note note)
         {
-            throw new NotImplementedException();
+            var entity = _context.Notes.FirstOrDefault(e => e.Id == note.Id);
+
+            if (entity != null)
+            {
+                entity.Text = note.Text;
+            }
+            _context.SaveChanges();
+            return note;
         }
     }
 }
+         
