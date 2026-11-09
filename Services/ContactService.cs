@@ -27,6 +27,11 @@ namespace ContactBook.Services
 
         }
 
+        public bool AddTag(int contactId, int tagId)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Delete(int id)
         {
             var entity = _context.Contacts.FirstOrDefault(x => x.Id == id);

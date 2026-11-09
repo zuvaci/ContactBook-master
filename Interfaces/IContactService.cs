@@ -9,5 +9,6 @@ namespace ContactBook.Interfaces
         Contact Add(Contact contact);
         Contact Update(Contact contact);
         bool Delete(int id);
+        bool AddTag(int contactId, int tagId);
     }
 }

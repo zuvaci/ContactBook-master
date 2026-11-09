@@ -5,7 +5,7 @@
 namespace ContactBook.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class AddEntities : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,47 +28,61 @@ namespace ContactBook.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContactNotes",
+                name: "Tags",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Note = table.Column<string>(type: "TEXT", nullable: false),
-                    ContactId = table.Column<int>(type: "INTEGER", nullable: true)
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContactNotes", x => x.Id);
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Text = table.Column<string>(type: "TEXT", nullable: false),
+                    ContactId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ContactNotes_Contacts_ContactId",
+                        name: "FK_Notes_Contacts_ContactId",
                         column: x => x.ContactId,
                         principalTable: "Contacts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ContactTags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    TagName = table.Column<string>(type: "TEXT", nullable: false),
-                    ContactId = table.Column<int>(type: "INTEGER", nullable: true)
+                    ContactId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TagId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContactTags", x => x.Id);
+                    table.PrimaryKey("PK_ContactTags", x => new { x.ContactId, x.TagId });
                     table.ForeignKey(
                         name: "FK_ContactTags_Contacts_ContactId",
                         column: x => x.ContactId,
                         principalTable: "Contacts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ContactTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ContactNotes_ContactId",
-                table: "ContactNotes",
-                column: "ContactId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contacts_Email",
@@ -77,8 +91,13 @@ namespace ContactBook.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContactTags_ContactId",
+                name: "IX_ContactTags_TagId",
                 table: "ContactTags",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notes_ContactId",
+                table: "Notes",
                 column: "ContactId");
         }
 
@@ -86,10 +105,13 @@ namespace ContactBook.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ContactNotes");
+                name: "ContactTags");
 
             migrationBuilder.DropTable(
-                name: "ContactTags");
+                name: "Notes");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Contacts");
