@@ -1,0 +1,19 @@
+﻿@using ContactBook.Models;
+
+@model Note
+
+<div class="containter-sm">
+	<form class="form-control" asp-controller="Home" asp-action="AddNote" method="post">
+		<div class="mb-3">
+			<label class="form-label" asp-for="Text">Text</label>
+			<input type="text" placeholder="Note text" asp-for="Text" id="Text" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label class="form-label" asp-for="ContactId">Contact Id</label>
+			<input type="text" placeholder="Contact Id" asp-for="ContactId" id="ContactId" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<button type="submit" class="btn btn-primary">Add</button>
+		</div>
+	</form>
+</div>

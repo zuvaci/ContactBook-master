@@ -1,0 +1,23 @@
+﻿@using ContactBook.Models;
+
+@model Note
+<form class="form-control" asp-action="NoteDetail" method="post" asp-controller="Home">
+	<div class="mb-3">
+		<label for="Text" class="form-label" asp-for="Text">Text</label>
+		<input class="form-control" id="Text" name="Text" type="text" value="@Model.Text" asp-for="Text" />
+		<input class="form-control" id="Id" name="Id" type="text" value="@Model.Id" asp-for="Id" hidden />
+		<input class="form-control" id="ContactId" name="ContactId" type="text" value="@Model.ContactId" asp-for="ContactId" hidden />
+	</div>
+	<div class="mb-3">
+		<button type="submit" class="btn btn-primary">Update</button>
+	</div>
+</form>
+<form class="form-control" asp-action="NoteDelete" asp-controller="Home">
+	<div class="mb-3">
+		<label for="Id" class="form-label" asp-for="Id" hidden>Id</label>
+		<input class="form-control" id="Id" name="Id" type="text" value="@Model.Id" asp-for="Id" hidden />
+	</div>
+	<div class="mb-3">
+		<button type="submit" class="btn btn-danger">Delete</button>
+    </div>
+</form>

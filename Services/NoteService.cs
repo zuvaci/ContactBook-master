@@ -23,9 +23,9 @@ namespace ContactBook.Services
             return note;
         }
 
-        public bool Delete(int contactId)
+        public bool Delete(int noteId)
         {
-            var entity = _context.Notes.FirstOrDefault(x => x.Id == contactId);
+            var entity = _context.Notes.FirstOrDefault(x => x.Id == noteId);
             if (entity != null)
             {
                 _context.Notes.Remove(entity);

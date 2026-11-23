@@ -5,6 +5,9 @@
 <div class="container">
 	<form class="form-control" asp-action="ContactDetail" method="post" asp-controller="Home">
 		<div class="mb-3">
+			<label  class="form-label">@Model.Id</label>
+		</div>
+		<div class="mb-3">
 			<label for="FirstName" class="form-label" asp-for="FirstName">First name</label>
 			<input class="form-control" id="FirstName" name="FirstName" type="text" value="@Model.FirstName" asp-for="FirstName" />
 		</div>
@@ -30,4 +33,21 @@
 		</div>
 		
 	</form>
+	<div class="text-center">
+		@foreach (var note in Model.Notes)
+		{
+			<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="NoteDetail" asp-route-noteId="@note.Id" asp-route-contactId="@note.ContactId">
+				<div class="card">
+					<p>@note.Text</p>
+				</div>
+			</a>
+
+		}
+	</div>
+	<div>
+		<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AddNote">
+			Add Note
+			</a>
+		
+	</div>
 </div>

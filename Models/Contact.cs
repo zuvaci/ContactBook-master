@@ -9,6 +9,7 @@ namespace ContactBook.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public List<ContactTag> ContactTags { get; set; } = new List<ContactTag>();
+        public List<Note> Notes { get; set; } = new List<Note>();
 
 
     }

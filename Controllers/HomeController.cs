@@ -3,6 +3,7 @@ using ContactBook.Interfaces;
 using ContactBook.Models;
 using ContactBook.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ContactBook.Controllers
 {
@@ -10,12 +11,14 @@ namespace ContactBook.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IContactService _contactService;
-        
+        private readonly INoteService _noteService;
 
-        public HomeController(ILogger<HomeController> logger, IContactService contactService)
+
+        public HomeController(ILogger<HomeController> logger, IContactService contactService, INoteService noteService)
         {
             _logger = logger;
             _contactService = contactService;
+            _noteService = noteService;
         }
 
         public IActionResult Index()
@@ -23,11 +26,49 @@ namespace ContactBook.Controllers
             var contacts = _contactService.GetAll();
             return View(contacts);
         }
-
+        public IActionResult NoteDetail(int noteId, int contactId)
+        {
+            var notes = _noteService.GetAllByContactId(contactId);
+            var note = notes.FirstOrDefault(n => n.Id == noteId);
+            return View(note);
+        }
+        [HttpPost]
+        public IActionResult NoteDetail(Note note) { 
+            _noteService.Update(note);
+            return RedirectToAction("Index");
+        }
         public IActionResult ContactDetail(int id)
         {
-            return View(_contactService.GetById(id));
+            var contact = _contactService.GetById(id);
+            contact.Notes = _noteService.GetAllByContactId(id);
+            return View(contact);
         }
+
+        public IActionResult NoteDelete(int Id)
+        {
+            _noteService.Delete(Id);
+            return RedirectToAction("Index");
+        }
+        public IActionResult AddNote()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddNote(int contactId, string text)
+        {
+            var note = new Note
+            {
+                ContactId = contactId,
+                Text = text
+            };
+            _noteService.Create(note);
+            return RedirectToAction("Index");
+        }
+
+
+
+
         [HttpPost] 
         public IActionResult ContactDetail(Contact contact)
         {

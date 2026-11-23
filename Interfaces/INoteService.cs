@@ -6,6 +6,6 @@ namespace ContactBook.Interfaces
         List<Note> GetAllByContactId(int contactId);
         Note Create(Note note);
         Note Update(Note note);
-        bool Delete(int contactId);
+        bool Delete(int noteId);
     }
 }
